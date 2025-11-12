@@ -1,148 +1,168 @@
-// Home page of the app, Currently a demo page for demonstration.
-// Please rewrite this file to implement your own logic. Do not replace or delete it, simply rewrite this HomePage.tsx file.
-import { useEffect } from 'react'
-import { Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { Toaster, toast } from '@/components/ui/sonner'
-import { create } from 'zustand'
-import { useShallow } from 'zustand/react/shallow'
-import { AppLayout } from '@/components/layout/AppLayout'
-
-// Timer store: independent slice with a clear, minimal API, for demonstration
-type TimerState = {
-  isRunning: boolean;
-  elapsedMs: number;
-  start: () => void;
-  pause: () => void;
-  reset: () => void;
-  tick: (deltaMs: number) => void;
-}
-
-const useTimerStore = create<TimerState>((set) => ({
-  isRunning: false,
-  elapsedMs: 0,
-  start: () => set({ isRunning: true }),
-  pause: () => set({ isRunning: false }),
-  reset: () => set({ elapsedMs: 0, isRunning: false }),
-  tick: (deltaMs) => set((s) => ({ elapsedMs: s.elapsedMs + deltaMs })),
-}))
-
-// Counter store: separate slice to showcase multiple stores without coupling
-type CounterState = {
-  count: number;
-  inc: () => void;
-  reset: () => void;
-}
-
-const useCounterStore = create<CounterState>((set) => ({
-  count: 0,
-  inc: () => set((s) => ({ count: s.count + 1 })),
-  reset: () => set({ count: 0 }),
-}))
-
-function formatDuration(ms: number): string {
-  const total = Math.max(0, Math.floor(ms / 1000))
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${m}:${s.toString().padStart(2, '0')}`
-}
-
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import type { ApiResponse, CalculatorData } from '@shared/types';
+import { Skeleton } from '@/components/ui/skeleton';
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+const numberFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 export function HomePage() {
-  // Select only what is needed to avoid unnecessary re-renders
-  const { isRunning, elapsedMs } = useTimerStore(
-    useShallow((s) => ({ isRunning: s.isRunning, elapsedMs: s.elapsedMs })),
-  )
-  const start = useTimerStore((s) => s.start)
-  const pause = useTimerStore((s) => s.pause)
-  const resetTimer = useTimerStore((s) => s.reset)
-  const count = useCounterStore((s) => s.count)
-  const inc = useCounterStore((s) => s.inc)
-  const resetCount = useCounterStore((s) => s.reset)
-
-  // Drive the timer only while running; avoid update-depth issues with a scoped RAF
+  const [data, setData] = useState<CalculatorData | null>(null);
+  const [totalPaid, setTotalPaid] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    if (!isRunning) return
-    let raf = 0
-    let last = performance.now()
-    const loop = () => {
-      const now = performance.now()
-      const delta = now - last
-      last = now
-      // Read store API directly to keep effect deps minimal and stable
-      useTimerStore.getState().tick(delta)
-      raf = requestAnimationFrame(loop)
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/calculator-data');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const result: ApiResponse<CalculatorData> = await response.json();
+        if (result.success && result.data) {
+          setData(result.data);
+          const startDate = new Date(result.data.startDate);
+          const now = new Date();
+          const secondsElapsed = (now.getTime() - startDate.getTime()) / 1000;
+          const salaryPerSecond = result.data.annualSalary / (365 * 24 * 60 * 60);
+          setTotalPaid(secondsElapsed * salaryPerSecond);
+        } else {
+          throw new Error(result.error || 'Failed to fetch calculator data');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (!data) return;
+    const salaryPerSecond = data.annualSalary / (365 * 24 * 60 * 60);
+    const interval = setInterval(() => {
+      setTotalPaid(prev => prev + salaryPerSecond);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [data]);
+  const renderContent = () => {
+    if (loading) {
+      return <LoadingSkeleton />;
     }
-    raf = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(raf)
-  }, [isRunning])
-
-  const onPleaseWait = () => {
-    inc()
-    if (!isRunning) {
-      start()
-      toast.success('Building your app…', {
-        description: 'Hang tight, we\'re setting everything up.',
-      })
-    } else {
-      pause()
-      toast.info('Taking a short pause', {
-        description: 'We\'ll continue shortly.',
-      })
-    }
-  }
-
-  const formatted = formatDuration(elapsedMs)
-
-  return (
-    <AppLayout>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground p-4 overflow-hidden relative">
-        <ThemeToggle />
-        <div className="absolute inset-0 bg-gradient-rainbow opacity-10 dark:opacity-20 pointer-events-none" />
-        <div className="text-center space-y-8 relative z-10 animate-fade-in">
-          <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-primary floating">
-              <Sparkles className="w-8 h-8 text-white rotating" />
-            </div>
-          </div>
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-balance leading-tight">
-            Creating your <span className="text-gradient">app</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto text-pretty">
-            Your application would be ready soon.
-          </p>
-          <div className="flex justify-center gap-4">
-            <Button 
-              size="lg"
-              onClick={onPleaseWait}
-              className="btn-gradient px-8 py-4 text-lg font-semibold hover:-translate-y-0.5 transition-all duration-200"
-              aria-live="polite"
-            >
-              Please Wait
-            </Button>
-          </div>
-          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-            <div>
-              Time elapsed: <span className="font-medium tabular-nums text-foreground">{formatted}</span>
-            </div>
-            <div>
-              Coins: <span className="font-medium tabular-nums text-foreground">{count}</span>
-            </div>
-          </div>
-          <div className="flex justify-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => { resetTimer(); resetCount(); toast('Reset complete') }}>
-              Reset
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => { inc(); toast('Coin added') }}>
-              Add Coin
-            </Button>
-          </div>
+    if (error || !data) {
+      return (
+        <div className="text-center text-[#cc0000]">
+          <h2 className="text-2xl font-display">Error Loading Data</h2>
+          <p className="text-[#f5f5f5]">{error || 'Calculator data is unavailable.'}</p>
         </div>
-        <footer className="absolute bottom-8 text-center text-muted-foreground/80">
-          <p>Powered by Cloudflare</p>
-        </footer>
-        <Toaster richColors closeButton />
+      );
+    }
+    const salaryPerHour = data.annualSalary / (365 * 24);
+    const salaryPerDay = data.annualSalary / 365;
+    return (
+      <>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-5xl md:text-7xl font-display uppercase tracking-wider text-center text-[#cc0000] animate-text-glow"
+        >
+          Accountability Clock
+        </motion.h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full mt-12">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="flex flex-col items-center"
+          >
+            <div className="w-full max-w-sm border-2 border-[#cc0000]/50 p-2 bg-black">
+              <img
+                src={data.imageUrl}
+                alt={data.personName}
+                className="w-full h-auto object-cover filter grayscale"
+              />
+            </div>
+            <h2 className="text-3xl font-display mt-4 text-[#f5f5f5] uppercase">{data.personName}</h2>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="space-y-8"
+          >
+            <div className="space-y-4">
+              <SalaryStat label="Yearly Salary" value={numberFormatter.format(data.annualSalary)} />
+              <SalaryStat label="Daily Rate" value={numberFormatter.format(salaryPerDay)} />
+              <SalaryStat label="Hourly Rate" value={currencyFormatter.format(salaryPerHour)} />
+            </div>
+            <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
+              <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Total Paid on Leave</h3>
+              <div className="font-mono text-5xl md:text-7xl text-[#cc0000] mt-2 animate-text-glow break-all">
+                {currencyFormatter.format(totalPaid)}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.6 }}
+          className="w-full mt-16 bg-black/50 border border-[#f5f5f5]/20 p-6 md:p-8"
+        >
+          <h3 className="font-display text-3xl text-[#cc0000] uppercase mb-4">Context</h3>
+          <p className="text-base text-[#f5f5f5]/80 whitespace-pre-wrap leading-relaxed">{data.contextText}</p>
+        </motion.div>
+      </>
+    );
+  };
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="py-16 md:py-24 flex flex-col items-center">
+          {renderContent()}
+        </div>
       </div>
-    </AppLayout>
-  )
+       <footer className="absolute bottom-4 text-center text-sm text-[#f5f5f5]/40">
+          <p>Built with ❤️ at Cloudflare</p>
+        </footer>
+    </div>
+  );
+}
+function SalaryStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between items-baseline border-b border-dashed border-[#f5f5f5]/20 pb-2">
+      <span className="font-display text-xl uppercase text-[#f5f5f5]/80 tracking-wider">{label}</span>
+      <span className="font-mono text-2xl text-[#f5f5f5]">{value}</span>
+    </div>
+  );
+}
+function LoadingSkeleton() {
+  return (
+    <div className="w-full max-w-5xl mx-auto">
+      <Skeleton className="h-16 w-3/4 mx-auto bg-white/10" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full mt-12">
+        <div className="flex flex-col items-center">
+          <Skeleton className="w-full max-w-sm h-96 bg-white/10" />
+          <Skeleton className="h-8 w-48 mt-4 bg-white/10" />
+        </div>
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <Skeleton className="h-8 w-full bg-white/10" />
+            <Skeleton className="h-8 w-full bg-white/10" />
+            <Skeleton className="h-8 w-full bg-white/10" />
+          </div>
+          <Skeleton className="h-40 w-full bg-white/10" />
+        </div>
+      </div>
+      <Skeleton className="h-64 w-full mt-16 bg-white/10" />
+    </div>
+  );
 }
