@@ -83,7 +83,7 @@ export function HomePage() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="flex flex-col items-center"
           >
-            <div className="w-full max-w-sm border-2 border-[#cc0000]/50 p-2 bg-black">
+            <div className="w-full max-w-sm border-2 border-[#cc0000]/50 p-2 bg-black animate-image-glitch">
               <img
                 src={data.imageUrl}
                 alt={data.personName}
@@ -105,7 +105,7 @@ export function HomePage() {
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Total Paid on Leave</h3>
-              <div className="font-mono text-5xl md:text-7xl text-[#cc0000] mt-2 animate-text-glow break-all">
+              <div className="font-mono text-5xl md:text-7xl text-[#cc0000] mt-2 animate-text-glow whitespace-nowrap">
                 {currencyFormatter.format(totalPaid)}
               </div>
             </div>

@@ -158,6 +158,17 @@ export default {
             'text-shadow': '0 0 10px rgba(204, 0, 0, 0.6), 0 0 20px rgba(204, 0, 0, 0.4)'
           }
         },
+        'image-glitch': {
+          '0%, 10%, 100%': { transform: 'translate(0, 0)', opacity: '1' },
+          '2%': { transform: 'translate(-2px, 2px)', opacity: '0.8' },
+          '4%': { transform: 'translate(2px, -2px)', opacity: '0.8' },
+          '6%': { transform: 'translate(-2px, -2px)', opacity: '0.8' },
+          '8%': { transform: 'translate(2px, 2px)', opacity: '0.8' },
+          '90%': { transform: 'translate(0, 0)', opacity: '1' },
+          '92%': { transform: 'skewX(10deg) scale(1.02)', opacity: '0.7' },
+          '94%': { transform: 'skewX(-10deg) scale(1.02)', opacity: '0.7' },
+          '96%': { transform: 'skewX(0) scale(1)', opacity: '1' },
+        },
   			'fade-in': {
   				'0%': {
   					opacity: '0',
@@ -231,6 +242,7 @@ export default {
   		},
   		animation: {
         'text-glow': 'text-glow 3s ease-in-out infinite',
+        'image-glitch': 'image-glitch 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite',
   			'fade-in': 'fade-in 0.6s ease-out',
   			'slide-up': 'slide-up 0.4s ease-out',
   			'scale-in': 'scale-in 0.3s ease-out',
