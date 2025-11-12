@@ -14,7 +14,7 @@ export default {
   				'sans-serif'
   			],
   			display: [
-  				'Cal Sans',
+          '"Bebas Neue"',
   				'Inter',
   				'system-ui',
   				'sans-serif'
@@ -150,6 +150,14 @@ export default {
   			glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)'
   		},
   		keyframes: {
+        'text-glow': {
+          '0%, 100%': {
+            'text-shadow': '0 0 5px rgba(204, 0, 0, 0.4), 0 0 10px rgba(204, 0, 0, 0.3)'
+          },
+          '50%': {
+            'text-shadow': '0 0 10px rgba(204, 0, 0, 0.6), 0 0 20px rgba(204, 0, 0, 0.4)'
+          }
+        },
   			'fade-in': {
   				'0%': {
   					opacity: '0',
@@ -222,6 +230,7 @@ export default {
   			}
   		},
   		animation: {
+        'text-glow': 'text-glow 3s ease-in-out infinite',
   			'fade-in': 'fade-in 0.6s ease-out',
   			'slide-up': 'slide-up 0.4s ease-out',
   			'scale-in': 'scale-in 0.3s ease-out',
