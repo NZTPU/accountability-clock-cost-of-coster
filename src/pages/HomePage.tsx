@@ -192,7 +192,7 @@ export function HomePage() {
             />
           </a>
           <p className="text-sm text-center text-[#f5f5f5]/60">
-            Promoted by the New Zealand Taxpayers��� Union, 117 Lambton Quay, Wellington 6011
+            Promoted by the New Zealand Taxpayers' Union, 117 Lambton Quay, Wellington 6011
           </p>
         </div>
       </footer>
