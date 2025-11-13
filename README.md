@@ -1,6 +1,6 @@
 # Accountability Clock
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/NZTPU/accountability-clock-cost-of-coster)
 
 The Accountability Clock is a visually striking, single-page web application designed as a public-facing dashboard. It calculates and displays, in real-time, the accumulating salary of a public official on paid leave amidst controversy. The application's core purpose is to provide a stark, quantifiable measure of the cost to taxpayers, framed by the context of the official's alleged misconduct.
 
@@ -108,7 +108,7 @@ Wrangler will handle the process of uploading your assets and deploying the work
 
 Alternatively, deploy directly from your GitHub repository with a single click:
 
-[cloudflarebutton]
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/NZTPU/accountability-clock-cost-of-coster)
 
 ## License
 
