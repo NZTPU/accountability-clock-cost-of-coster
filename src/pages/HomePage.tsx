@@ -124,8 +124,8 @@ export function HomePage() {
           transition={{ duration: 0.7, delay: 0.6 }}
           className="w-full mt-16 bg-black/50 border border-[#f5f5f5]/20 p-6 md:p-8"
         >
-          <h3 className="font-display text-3xl text-[#cc0000] uppercase mb-4">Context</h3>
-          <p className="text-base text-[#f5f5f5]/80 whitespace-pre-wrap leading-relaxed">{data.contextText}</p>
+          <h3 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Context</h3>
+          <p className="text-xl md:text-2xl text-center text-[#f5f5f5] leading-relaxed max-w-3xl mx-auto">{data.contextText}</p>
         </motion.div>
       </>
     );
