@@ -163,8 +163,11 @@ export function HomePage() {
           className="w-full mt-16 bg-black/50 border border-[#f5f5f5]/20 p-6 md:p-8"
         >
           <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
-          <p className="text-lg text-center text-[#f5f5f5]/60 max-w-2xl mx-auto mb-6">
+          <p className="text-lg text-center text-[#f5f5f5]/60 max-w-2xl mx-auto">
             The yearly salary is calculated based on the Chief Executive of the Social Investment Agency’s salary between November 11 and December 31 2024. This is then used to determine the cost to taxpayers in real time.
+          </p>
+          <p className="text-lg text-center text-[#f5f5f5]/60 max-w-3xl mx-auto mt-4 break-words">
+            This figure is available at <a href="https://www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#cc0000] transition-colors">www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration</a>
           </p>
         </motion.div>
       </>
