@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { intervalToDuration } from 'date-fns';
 import type { ApiResponse, CalculatorData } from '@shared/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -21,6 +23,7 @@ const totalPaidFormatter = new Intl.NumberFormat('en-US', {
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
   const [totalPaid, setTotalPaid] = useState<number>(0);
+  const [elapsedTime, setElapsedTime] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -57,7 +60,22 @@ export function HomePage() {
       animationFrameId = requestAnimationFrame(updateTotal);
     };
     animationFrameId = requestAnimationFrame(updateTotal);
-    return () => cancelAnimationFrame(animationFrameId);
+    const updateElapsedTime = () => {
+      const now = new Date();
+      const duration = intervalToDuration({ start: startDate, end: now });
+      const parts = [];
+      if (duration.days) parts.push(`${duration.days}d`);
+      if (duration.hours) parts.push(`${duration.hours}h`);
+      if (duration.minutes) parts.push(`${duration.minutes}m`);
+      if (duration.seconds) parts.push(`${duration.seconds}s`);
+      setElapsedTime(parts.join(' '));
+    };
+    updateElapsedTime();
+    const intervalId = setInterval(updateElapsedTime, 1000);
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      clearInterval(intervalId);
+    };
   }, [data]);
   const renderContent = () => {
     if (loading) {
@@ -81,7 +99,7 @@ export function HomePage() {
           transition={{ duration: 0.5 }}
           className="text-5xl md:text-7xl font-display uppercase tracking-wider text-center text-[#cc0000] animate-text-glow"
         >
-          Cost of Coster Clock
+          Costly Coster Calculator
         </motion.h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full mt-12">
           <motion.div
@@ -106,16 +124,24 @@ export function HomePage() {
             className="space-y-8"
           >
             <div className="space-y-4">
-              <SalaryStat label="Yearly Salary" value={numberFormatter.format(data.annualSalary)} />
+              <SalaryStat label="Yearly Salary*" value={numberFormatter.format(data.annualSalary)} anchor="#salary-calculation" />
               <SalaryStat label="Daily Rate" value={numberFormatter.format(salaryPerDay)} />
               <SalaryStat label="Hourly Rate" value={currencyFormatter.format(salaryPerHour)} />
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
-              <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Total Paid on Leave</h3>
+              <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Cost to Taxpayers Since Leave</h3>
               <div className="font-mono text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-[#cc0000] mt-2 animate-text-glow">
                 {totalPaidFormatter.format(totalPaid)}
               </div>
+              <p className="text-sm text-[#f5f5f5]/70 mt-2 font-mono">
+                Time since leave: {elapsedTime}
+              </p>
             </div>
+            <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-colors duration-300">
+              <a href="mailto:commissioner@publicservice.govt.nz?subject=Accountability%20for%20Andrew%20Coster&cc=contact@taxpayers.org.nz&body=Dear%20Public%20Service%20Commissioner,%0D%0A%0D%0AI%20am%20writing%20to%20express%20my%20concern%20that%20Andrew%20Coster%20remains%20on%20the%20public%20payroll.%20Given%20the%20damning%20findings%20of%20the%20IPCA%20report,%20I%20urge%20you%20to%20take%20immediate%20action%20to%20terminate%20his%20employment%20and%20ensure%20no%20further%20taxpayer%20money%20is%20spent.%0D%0A%0D%0AThank%20you.">
+                EMAIL THE COMMISSIONER NOW
+              </a>
+            </Button>
           </motion.div>
         </div>
         <motion.div
@@ -126,6 +152,18 @@ export function HomePage() {
         >
           <h3 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Context</h3>
           <p className="text-xl md:text-2xl text-center text-[#f5f5f5] leading-relaxed max-w-3xl mx-auto">{data.contextText}</p>
+        </motion.div>
+        <motion.div
+          id="salary-calculation"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.8 }}
+          className="w-full mt-16 text-center"
+        >
+          <h4 className="font-display text-2xl text-[#cc0000] uppercase mb-2">Salary Calculation</h4>
+          <p className="text-sm text-[#f5f5f5]/60 max-w-2xl mx-auto">
+            *The yearly salary is based on the reported figure for the Chief Executive of the Social Investment Agency. The real-time calculation divides this annual salary by the number of seconds in a year to determine the cost per second.
+          </p>
         </motion.div>
       </>
     );
@@ -159,10 +197,12 @@ export function HomePage() {
     </div>
   );
 }
-function SalaryStat({ label, value }: { label: string; value: string }) {
+function SalaryStat({ label, value, anchor }: { label: string; value: string; anchor?: string }) {
   return (
     <div className="flex justify-between items-baseline border-b border-dashed border-[#f5f5f5]/20 pb-2">
-      <span className="font-display text-xl uppercase text-[#f5f5f5]/80 tracking-wider">{label}</span>
+      <span className="font-display text-xl uppercase text-[#f5f5f5]/80 tracking-wider">
+        {anchor ? <a href={anchor} className="hover:text-[#cc0000] transition-colors">{label}</a> : label}
+      </span>
       <span className="font-mono text-2xl text-[#f5f5f5]">{value}</span>
     </div>
   );
