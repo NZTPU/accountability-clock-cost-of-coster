@@ -15,8 +15,8 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
 const totalPaidFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 3,
-  maximumFractionDigits: 3,
+  minimumFractionDigits: 6,
+  maximumFractionDigits: 6,
 });
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
@@ -33,11 +33,6 @@ export function HomePage() {
         const result: ApiResponse<CalculatorData> = await response.json();
         if (result.success && result.data) {
           setData(result.data);
-          const startDate = new Date(result.data.startDate);
-          const now = new Date();
-          const secondsElapsed = (now.getTime() - startDate.getTime()) / 1000;
-          const salaryPerSecond = result.data.annualSalary / (365 * 24 * 60 * 60);
-          setTotalPaid(secondsElapsed * salaryPerSecond);
         } else {
           throw new Error(result.error || 'Failed to fetch calculator data');
         }
@@ -52,11 +47,17 @@ export function HomePage() {
   }, []);
   useEffect(() => {
     if (!data) return;
+    const startDate = new Date(data.startDate);
     const salaryPerSecond = data.annualSalary / (365 * 24 * 60 * 60);
-    const interval = setInterval(() => {
-      setTotalPaid(prev => prev + salaryPerSecond);
-    }, 1000);
-    return () => clearInterval(interval);
+    let animationFrameId: number;
+    const updateTotal = () => {
+      const now = new Date();
+      const secondsElapsed = (now.getTime() - startDate.getTime()) / 1000;
+      setTotalPaid(secondsElapsed * salaryPerSecond);
+      animationFrameId = requestAnimationFrame(updateTotal);
+    };
+    animationFrameId = requestAnimationFrame(updateTotal);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [data]);
   const renderContent = () => {
     if (loading) {
@@ -139,7 +140,7 @@ export function HomePage() {
       <footer className="w-full py-6 bg-black/30 border-t border-white/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-center sm:text-left text-[#f5f5f5]/60">
-            This tool is provided for public information by the
+            This tool is provided for public information by the New Zealand Taxpayer's Union.
           </p>
           <a
             href="https://www.taxpayers.org.nz/"
@@ -149,7 +150,7 @@ export function HomePage() {
           >
             <img
               src="https://assets.nationbuilder.com/themes/539f560501925b5591000001/attachments/original/1669929583/image-logo-white.png?1669929583"
-              alt="Taxpayers' Union Logo"
+              alt="New Zealand Taxpayer's Union Logo"
               className="h-10"
             />
           </a>
