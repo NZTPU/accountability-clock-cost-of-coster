@@ -21,12 +21,14 @@ const totalPaidFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 3,
 });
 // Refactored mailto link construction
-const emailTo = 'commissioner@publicservice.govt.nz';
-const emailCc = 'contact@taxpayers.org.nz';
-const emailSubject = 'Accountability for Andrew Coster';
-const emailBody = `Dear Public Service Commissioner,
-I am writing to express my concern that Andrew Coster remains on the public payroll. Given the damning findings of the IPCA report, I urge you to take immediate action to terminate his employment and ensure no further taxpayer money is spent.
-Thank you.`;
+const emailTo = 'commission@publicservice.govt.nz';
+const emailCc = 'submissions@taxpayers.org.nz';
+const emailSubject = 'Sack Andrew Coster, No Golden Goodbye.';
+const emailBody = `Dear Mr Roche,
+I’m writing to urge you to immediately dismiss Andrew Coster from his role as Chief Executive of the Social Investment Agency.
+The Independent Police Conduct Authority’s findings of “serious misconduct” and “a total lack of leadership and integrity” make his continued employment untenable. It is unacceptable that he remains on full paid leave at taxpayers’ expense, and equally unacceptable that any golden handshake be considered.
+Taxpayers deserve real accountability. That means consequences, not a payout.
+Sincerely,`;
 const mailtoLink = `mailto:${emailTo}?cc=${emailCc}&subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
