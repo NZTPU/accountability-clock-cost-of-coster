@@ -130,15 +130,31 @@ export function HomePage() {
     );
   };
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div className="min-h-screen w-full flex flex-col items-center justify-between relative overflow-hidden">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="py-16 md:py-24 flex flex-col items-center">
           {renderContent()}
         </div>
-      </div>
-       <footer className="absolute bottom-4 text-center text-sm text-[#f5f5f5]/40">
-          <p>Built with ❤️ at Cloudflare</p>
-        </footer>
+      </main>
+      <footer className="w-full py-6 bg-black/30 border-t border-white/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-center sm:text-left text-[#f5f5f5]/60">
+            This tool is provided for public information by the
+          </p>
+          <a
+            href="https://www.taxpayers.org.nz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-80 hover:opacity-100 transition-opacity"
+          >
+            <img
+              src="https://assets.nationbuilder.com/themes/539f560501925b5591000001/attachments/original/1669929583/image-logo-white.png?1669929583"
+              alt="Taxpayers' Union Logo"
+              className="h-10"
+            />
+          </a>
+        </div>
+      </footer>
     </div>
   );
 }
