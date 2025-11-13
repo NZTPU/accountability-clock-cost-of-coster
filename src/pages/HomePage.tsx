@@ -80,7 +80,7 @@ export function HomePage() {
           transition={{ duration: 0.5 }}
           className="text-5xl md:text-7xl font-display uppercase tracking-wider text-center text-[#cc0000] animate-text-glow"
         >
-          Accountability Clock
+          Cost of Coster Clock
         </motion.h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center w-full mt-12">
           <motion.div
