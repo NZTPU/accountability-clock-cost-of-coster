@@ -12,6 +12,12 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
   maximumFractionDigits: 0,
 });
+const totalPaidFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 3,
+  maximumFractionDigits: 3,
+});
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
   const [totalPaid, setTotalPaid] = useState<number>(0);
@@ -105,8 +111,8 @@ export function HomePage() {
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Total Paid on Leave</h3>
-              <div className="font-mono text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#cc0000] mt-2 animate-text-glow whitespace-nowrap">
-                {currencyFormatter.format(totalPaid)}
+              <div className="font-mono text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-[#cc0000] mt-2 animate-text-glow">
+                {totalPaidFormatter.format(totalPaid)}
               </div>
             </div>
           </motion.div>
