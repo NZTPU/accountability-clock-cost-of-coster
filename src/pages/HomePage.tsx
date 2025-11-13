@@ -20,6 +20,14 @@ const totalPaidFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 3,
   maximumFractionDigits: 3,
 });
+// Refactored mailto link construction
+const emailTo = 'commissioner@publicservice.govt.nz';
+const emailCc = 'contact@taxpayers.org.nz';
+const emailSubject = 'Accountability for Andrew Coster';
+const emailBody = `Dear Public Service Commissioner,
+I am writing to express my concern that Andrew Coster remains on the public payroll. Given the damning findings of the IPCA report, I urge you to take immediate action to terminate his employment and ensure no further taxpayer money is spent.
+Thank you.`;
+const mailtoLink = `mailto:${emailTo}?cc=${emailCc}&subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
   const [totalPaid, setTotalPaid] = useState<number>(0);
@@ -138,7 +146,7 @@ export function HomePage() {
               </p>
             </div>
             <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-all duration-300 animate-button-glow hover:scale-105 hover:-translate-y-1">
-              <a href="mailto:commissioner@publicservice.govt.nz?subject=Accountability%20for%20Andrew%20Coster&cc=contact@taxpayers.org.nz&body=Dear%20Public%20Service%20Commissioner,%0D%0A%0D%0AI%20am%20writing%20to%20express%20my%20concern%20that%20Andrew%20Coster%20remains%20on%20the%20public%20payroll.%20Given%20the%20damning%20findings%20of%20the%20IPCA%20report,%20I%20urge%20you%20to%20take%20immediate%20action%20to%20terminate%20his%20employment%20and%20ensure%20no%20further%20taxpayer%20money%20is%20spent.%0D%0A%0D%0AThank%20you.">
+              <a href={mailtoLink}>
                 EMAIL THE COMMISSIONER NOW
               </a>
             </Button>
