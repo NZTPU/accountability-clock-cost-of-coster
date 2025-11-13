@@ -15,8 +15,8 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
 const totalPaidFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
-  minimumFractionDigits: 6,
-  maximumFractionDigits: 6,
+  minimumFractionDigits: 3,
+  maximumFractionDigits: 3,
 });
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
