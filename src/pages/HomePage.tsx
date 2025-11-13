@@ -20,16 +20,8 @@ const totalPaidFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 3,
   maximumFractionDigits: 3,
 });
-// Refactored mailto link construction
-const emailTo = 'commission@publicservice.govt.nz';
-const emailCc = 'submissions@taxpayers.org.nz';
-const emailSubject = 'Sack Andrew Coster, No Golden Goodbye.';
-const emailBody = `Dear Mr Roche,
-I’m writing to urge you to immediately dismiss Andrew Coster from his role as Chief Executive of the Social Investment Agency.
-The Independent Police Conduct Authority’s findings of “serious misconduct” and “a total lack of leadership and integrity” make his continued employment untenable. It is unacceptable that he remains on full paid leave at taxpayers’ expense, and equally unacceptable that any golden handshake be considered.
-Taxpayers deserve real accountability. That means consequences, not a payout.
-Sincerely,`;
-const mailtoLink = `mailto:${emailTo}?cc=${emailCc}&subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+// Updated mailto link as per client request
+const mailtoLink = `mailto:commission@publicservice.govt.nz?cc=submissions@taxpayers.org.nz&subject=Sack%20Andrew%20Coster%2C%20No%20Golden%20Goodbye.&body=Dear%20Mr%20Roche%2C%0A%0AI%E2%80%99m%20writing%20to%20urge%20you%20to%20immediately%20dismiss%20Andrew%20Coster%20from%20his%20role%20as%20Chief%20Executive%20of%20the%20Social%20Investment%20Agency.%0A%0AThe%20Independent%20Police%20Conduct%20Authority%E2%80%99s%20findings%20of%20%E2%80%9Cserious%20misconduct%E2%80%9D%20and%20%E2%80%9Ca%20total%20lack%20of%20leadership%20and%20integrity%E2%80%9D%20make%20his%20continued%20employment%20untenable.%0AIt%20is%20unacceptable%20that%20he%20remains%20on%20full%20paid%20leave%20at%20taxpayers%E2%80%99%20expense%2C%20and%20equally%20unacceptable%20that%20any%20golden%20handshake%20be%20considered.%0A%0ATaxpayers%20deserve%20real%20accountability.%20That%20means%20consequences%2C%20not%20a%20payout.%0A%0ASincerely%2C`;
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
   const [totalPaid, setTotalPaid] = useState<number>(0);
