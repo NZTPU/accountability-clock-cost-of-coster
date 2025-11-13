@@ -137,7 +137,7 @@ export function HomePage() {
                 Time since leave: {elapsedTime}
               </p>
             </div>
-            <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-colors duration-300">
+            <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-all duration-300 animate-button-glow hover:scale-105 hover:-translate-y-1">
               <a href="mailto:commissioner@publicservice.govt.nz?subject=Accountability%20for%20Andrew%20Coster&cc=contact@taxpayers.org.nz&body=Dear%20Public%20Service%20Commissioner,%0D%0A%0D%0AI%20am%20writing%20to%20express%20my%20concern%20that%20Andrew%20Coster%20remains%20on%20the%20public%20payroll.%20Given%20the%20damning%20findings%20of%20the%20IPCA%20report,%20I%20urge%20you%20to%20take%20immediate%20action%20to%20terminate%20his%20employment%20and%20ensure%20no%20further%20taxpayer%20money%20is%20spent.%0D%0A%0D%0AThank%20you.">
                 EMAIL THE COMMISSIONER NOW
               </a>
@@ -158,12 +158,13 @@ export function HomePage() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8 }}
-          className="w-full mt-16 text-center"
+          className="w-full mt-16 bg-black/50 border border-[#f5f5f5]/20 p-6 md:p-8"
         >
-          <h4 className="font-display text-2xl text-[#cc0000] uppercase mb-2">Salary Calculation</h4>
-          <p className="text-sm text-[#f5f5f5]/60 max-w-2xl mx-auto">
-            *The yearly salary is based on the reported figure for the Chief Executive of the Social Investment Agency. The real-time calculation divides this annual salary by the number of seconds in a year to determine the cost per second.
+          <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
+          <p className="text-sm text-center text-[#f5f5f5]/60 max-w-2xl mx-auto mb-6">
+            *The yearly salary is based on the reported figure for the Chief Executive of the Social Investment Agency. The real-time calculation divides this annual salary to determine the cost per unit of time.
           </p>
+          <CalculationTable />
         </motion.div>
       </>
     );
@@ -204,6 +205,25 @@ function SalaryStat({ label, value, anchor }: { label: string; value: string; an
         {anchor ? <a href={anchor} className="hover:text-[#cc0000] transition-colors">{label}</a> : label}
       </span>
       <span className="font-mono text-2xl text-[#f5f5f5]">{value}</span>
+    </div>
+  );
+}
+function CalculationTable() {
+  const calculations = [
+    { label: 'Per Year', value: '558,235.2941' },
+    { label: 'Per Day', value: '1,529.411765' },
+    { label: 'Per Hour', value: '63.7254902' },
+    { label: 'Per Minute', value: '1.062091503' },
+    { label: 'Per Second', value: '0.017701525' },
+  ];
+  return (
+    <div className="max-w-md mx-auto space-y-2">
+      {calculations.map((calc) => (
+        <div key={calc.label} className="flex justify-between items-baseline border-b border-dashed border-[#f5f5f5]/10 py-2">
+          <span className="font-display text-lg uppercase text-[#f5f5f5]/70 tracking-wider">{calc.label}</span>
+          <span className="font-mono text-lg text-[#f5f5f5]">${calc.value}</span>
+        </div>
+      ))}
     </div>
   );
 }

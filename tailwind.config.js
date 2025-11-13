@@ -158,6 +158,14 @@ export default {
             'text-shadow': '0 0 10px rgba(204, 0, 0, 0.6), 0 0 20px rgba(204, 0, 0, 0.4)'
           }
         },
+        'button-glow': {
+          '0%, 100%': {
+            'box-shadow': '0 0 15px 0px rgba(204, 0, 0, 0.5)'
+          },
+          '50%': {
+            'box-shadow': '0 0 25px 5px rgba(204, 0, 0, 0.7)'
+          }
+        },
         'image-glitch': {
           '0%, 10%, 100%': { transform: 'translate(0, 0)', opacity: '1' },
           '2%': { transform: 'translate(-2px, 2px)', opacity: '0.8' },
@@ -242,6 +250,7 @@ export default {
   		},
   		animation: {
         'text-glow': 'text-glow 3s ease-in-out infinite',
+        'button-glow': 'button-glow 2s ease-in-out infinite',
         'image-glitch': 'image-glitch 5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite',
   			'fade-in': 'fade-in 0.6s ease-out',
   			'slide-up': 'slide-up 0.4s ease-out',
