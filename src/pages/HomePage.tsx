@@ -127,8 +127,8 @@ export function HomePage() {
           >
             <div className="space-y-4">
               <SalaryStat label="Yearly Salary*" value={numberFormatter.format(data.annualSalary)} anchor="#salary-calculation" />
-              <SalaryStat label="Daily Rate" value={numberFormatter.format(salaryPerDay)} />
-              <SalaryStat label="Hourly Rate" value={currencyFormatter.format(salaryPerHour)} />
+              <SalaryStat label="Increase per day." value={numberFormatter.format(salaryPerDay)} />
+              <SalaryStat label="Increase per hour." value={currencyFormatter.format(salaryPerHour)} />
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Paid Leave: Cost to Taxpayer</h3>
