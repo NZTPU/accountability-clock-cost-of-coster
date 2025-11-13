@@ -162,7 +162,7 @@ export function HomePage() {
         >
           <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
           <p className="text-sm text-center text-[#f5f5f5]/60 max-w-2xl mx-auto mb-6">
-            *The yearly salary is based on the reported figure for the Chief Executive of the Social Investment Agency. The real-time calculation divides this annual salary to determine the cost per unit of time.
+            The yearly salary is an annualised value based on the Chief Executive of the Social Investment Agency between November 11 and December 31 2024. The real-time calculation divides this annual salary to determine the cost per unit of time.
           </p>
           <CalculationTable />
         </motion.div>
