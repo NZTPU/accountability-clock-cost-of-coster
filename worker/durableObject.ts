@@ -51,7 +51,7 @@ export class GlobalDurableObject extends DurableObject {
       // In a real application, this might come from storage or an external source.
       // For this project, it's hardcoded as per the blueprint.
       const data: CalculatorData = {
-        annualSalary: 557150, // Updated salary based on client feedback
+        annualSalary: 558235.2941, // Updated salary based on client feedback
         startDate: "2025-11-11T00:00:00Z", // Updated start date based on client feedback
         personName: "Andrew Coster",
         imageUrl: "https://www.nzherald.co.nz/resizer/v2/AFGBQ7MUKFFQXMMNLD223HC4IQ.jpg?auth=73d0deb9a020da523eea2c60f3d3a49eb5e7c77bd669dfef35f6d5c95b8b3874&width=576&height=613&quality=70&smart=true",
