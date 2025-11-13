@@ -91,8 +91,8 @@ export function HomePage() {
         </div>
       );
     }
-    const salaryPerHour = data.annualSalary / (365 * 24);
     const salaryPerDay = data.annualSalary / 365;
+    const salaryPerFortnight = salaryPerDay * 14;
     return (
       <>
         <motion.h1
@@ -127,8 +127,8 @@ export function HomePage() {
           >
             <div className="space-y-4">
               <SalaryStat label="Yearly Salary*" value={numberFormatter.format(data.annualSalary)} anchor="#salary-calculation" />
-              <SalaryStat label="Increase per day." value={numberFormatter.format(salaryPerDay)} />
-              <SalaryStat label="Increase per hour." value={currencyFormatter.format(salaryPerHour)} />
+              <SalaryStat label="Fortnightly Rate" value={numberFormatter.format(salaryPerFortnight)} />
+              <SalaryStat label="Daily Rate" value={numberFormatter.format(salaryPerDay)} />
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Paid Leave: Cost to Taxpayer</h3>
@@ -136,7 +136,7 @@ export function HomePage() {
                 {totalPaidFormatter.format(totalPaid)}
               </div>
               <p className="text-sm text-[#f5f5f5]/70 mt-2 font-mono">
-                Time since leave: {elapsedTime}
+                Time on garden leave: {elapsedTime}
               </p>
             </div>
             <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-all duration-300 animate-button-glow hover:scale-105 hover:translate-y-[-4px]">
@@ -163,10 +163,9 @@ export function HomePage() {
           className="w-full mt-16 bg-black/50 border border-[#f5f5f5]/20 p-6 md:p-8"
         >
           <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
-          <p className="text-sm text-center text-[#f5f5f5]/60 max-w-2xl mx-auto mb-6">
+          <p className="text-lg text-center text-[#f5f5f5]/60 max-w-2xl mx-auto mb-6">
             The yearly salary is an annualised value based on the salary of the Chief Executive of the Social Investment Agency between November 11 and December 31 2024. The real-time calculation divides this annual salary to determine the cost per unit of time.
           </p>
-          <CalculationTable />
         </motion.div>
       </>
     );
@@ -178,11 +177,8 @@ export function HomePage() {
           {renderContent()}
         </div>
       </main>
-      <footer className="w-full py-6 bg-black/30 border-t border-white/10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-center sm:text-left text-[#f5f5f5]/60">
-            This tool is provided for public information by the New Zealand Taxpayer's Union.
-          </p>
+      <footer className="w-full py-6 bg-black border-t border-white/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center gap-4">
           <a
             href="https://www.taxpayers.org.nz/"
             target="_blank"
@@ -192,9 +188,12 @@ export function HomePage() {
             <img
               src="https://assets.nationbuilder.com/themes/539f560501925b5591000001/attachments/original/1669929583/image-logo-white.png?1669929583"
               alt="New Zealand Taxpayer's Union Logo"
-              className="h-10"
+              className="h-24"
             />
           </a>
+          <p className="text-sm text-center text-[#f5f5f5]/60">
+            Promoted by the New Zealand Taxpayers��� Union, 117 Lambton Quay, Wellington 6011
+          </p>
         </div>
       </footer>
     </div>
@@ -207,25 +206,6 @@ function SalaryStat({ label, value, anchor }: { label: string; value: string; an
         {anchor ? <a href={anchor} className="hover:text-[#cc0000] transition-colors">{label}</a> : label}
       </span>
       <span className="font-mono text-2xl text-[#f5f5f5]">{value}</span>
-    </div>
-  );
-}
-function CalculationTable() {
-  const calculations = [
-    { label: 'Per Year', value: '558,235.2941' },
-    { label: 'Per Day', value: '1,529.411765' },
-    { label: 'Per Hour', value: '63.7254902' },
-    { label: 'Per Minute', value: '1.062091503' },
-    { label: 'Per Second', value: '0.017701525' },
-  ];
-  return (
-    <div className="max-w-md mx-auto space-y-2">
-      {calculations.map((calc) => (
-        <div key={calc.label} className="flex justify-between items-baseline border-b border-dashed border-[#f5f5f5]/10 py-2">
-          <span className="font-display text-lg uppercase text-[#f5f5f5]/70 tracking-wider">{calc.label}</span>
-          <span className="font-mono text-lg text-[#f5f5f5]">${calc.value}</span>
-        </div>
-      ))}
     </div>
   );
 }
