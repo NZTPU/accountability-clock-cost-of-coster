@@ -2,29 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏱��</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <!-- Primary Meta Tags -->
+    <title>Costly Coster</title>
+    <meta name="title" content="Costly Coster: The Real-Time Accountability Clock">
+    <meta name="description" content="A real-time calculator that visualizes the salary paid to a public official on leave, highlighting the cost to taxpayers amidst controversy.">
+    <meta name="keywords" content="Andrew Coster, Accountability, Taxpayers, New Zealand, Public Service, Salary, Calculator, Cost of Coster">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://costlycoster.nz/">
+    <meta property="og:title" content="Costly Coster: The Real-Time Accountability Clock">
+    <meta property="og:description" content="Track the cost of Andrew Coster's paid leave in real-time. A tool for taxpayer accountability.">
+    <meta property="og:image" content="https://www.nzherald.co.nz/resizer/v2/AFGBQ7MUKFFQXMMNLD223HC4IQ.jpg?auth=73d0deb9a020da523eea2c60f3d3a49eb5e7c77bd669dfef35f6d5c95b8b3874&width=576&height=613&quality=70&smart=true">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://costlycoster.nz/">
+    <meta property="twitter:title" content="Costly Coster: The Real-Time Accountability Clock">
+    <meta property="twitter:description" content="Track the cost of Andrew Coster's paid leave in real-time. A tool for taxpayer accountability.">
+    <meta property="twitter:image" content="https://www.nzherald.co.nz/resizer/v2/AFGBQ7MUKFFQXMMNLD223HC4IQ.jpg?auth=73d0deb9a020da523eea2c60f3d3a49eb5e7c77bd669dfef35f6d5c95b8b3874&width=576&height=613&quality=70&smart=true">
   </head>
   <body>
     <div id="root"></div>
-    <script>
-        window.addEventListener('error', (event) => {
-          const isOurAppError = event.filename && event.filename.startsWith(window.location.origin);
-          if (isOurAppError) {
-            navigator.sendBeacon('/api/client-errors', JSON.stringify({
-              message: event.message,
-              url: window.location.href,
-              userAgent: navigator.userAgent,
-              source: event.filename,
-              lineno: event.lineno,
-              colno: event.colno,
-              stack: event.error ? event.error.stack : null,
-              timestamp: new Date().toISOString()
-            }));
-          }
-        }, true);
-    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
