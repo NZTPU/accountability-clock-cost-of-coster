@@ -4,7 +4,7 @@
  */
  {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "accountability-clock-spvn8suso7djudwejym8r",
+	"name": "costofcoster",
 	"main": "worker/index.ts",
 	"compatibility_date": "2025-04-24",
 	"assets": {
