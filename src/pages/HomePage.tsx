@@ -56,7 +56,7 @@ export function HomePage() {
     const salaryPerSecond = data.annualSalary / (365 * 24 * 60 * 60);
     // Freeze the clock at a specific end date.
     // Using a hardcoded date for the final calculation as the counter is now static.
-    const endDate = new Date("2025-12-15T09:00:00Z"); 
+    const endDate = new Date("2025-12-15T09:00:00Z");
     const now = new Date();
     const finalDate = now < endDate ? now : endDate; // Use 'now' if it's before the end date, otherwise use the end date.
     // Calculate total paid and elapsed time once and set it.
@@ -134,7 +134,7 @@ export function HomePage() {
                 Time on garden leave: {elapsedTime}
               </p>
               <p className="text-sm text-[#f5f5f5]/70 mt-4 font-mono">
-                Andrew Coster has resigned. The clock has stopped at this final cost to taxpayers.
+                Andrew Coster has resigned. The clock has stopped.
               </p>
             </div>
             <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-all duration-300 animate-button-glow hover:scale-105 hover:translate-y-[-4px]">
@@ -162,7 +162,7 @@ export function HomePage() {
         >
           <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
           <p className="text-lg text-center text-[#f5f5f5]/60 max-w-2xl mx-auto">
-            The yearly salary is calculated based on the Chief Executive of the Social Investment Agency’s salary between November 11 and December 31 2024. This is then used to determine the cost to taxpayers in real time.
+            The yearly salary is calculated based on the Chief Executive of the Social Investment Agency���s salary between November 11 and December 31 2024. This is then used to determine the cost to taxpayers in real time.
           </p>
           <p className="text-lg text-center text-[#f5f5f5]/60 max-w-3xl mx-auto mt-4 break-words">
             This figure is available at <a href="https://www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#cc0000] transition-colors">www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration</a>
