@@ -54,30 +54,25 @@ export function HomePage() {
     if (!data) return;
     const startDate = new Date(data.startDate);
     const salaryPerSecond = data.annualSalary / (365 * 24 * 60 * 60);
-    let animationFrameId: number;
-    const updateTotal = () => {
-      const now = new Date();
-      const secondsElapsed = (now.getTime() - startDate.getTime()) / 1000;
+    // Freeze the clock at a specific end date.
+    // Using a hardcoded date for the final calculation as the counter is now static.
+    const endDate = new Date("2025-12-15T09:00:00Z"); 
+    const now = new Date();
+    const finalDate = now < endDate ? now : endDate; // Use 'now' if it's before the end date, otherwise use the end date.
+    // Calculate total paid and elapsed time once and set it.
+    const secondsElapsed = (finalDate.getTime() - startDate.getTime()) / 1000;
+    if (secondsElapsed > 0) {
       setTotalPaid(secondsElapsed * salaryPerSecond);
-      animationFrameId = requestAnimationFrame(updateTotal);
-    };
-    animationFrameId = requestAnimationFrame(updateTotal);
-    const updateElapsedTime = () => {
-      const now = new Date();
-      const duration = intervalToDuration({ start: startDate, end: now });
-      const parts = [];
-      if (duration.days) parts.push(`${duration.days}d`);
-      if (duration.hours) parts.push(`${duration.hours}h`);
-      if (duration.minutes) parts.push(`${duration.minutes}m`);
-      if (duration.seconds) parts.push(`${duration.seconds}s`);
-      setElapsedTime(parts.join(' '));
-    };
-    updateElapsedTime();
-    const intervalId = setInterval(updateElapsedTime, 1000);
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      clearInterval(intervalId);
-    };
+    } else {
+      setTotalPaid(0);
+    }
+    const duration = intervalToDuration({ start: startDate, end: finalDate });
+    const parts = [];
+    if (duration.days && duration.days > 0) parts.push(`${duration.days}d`);
+    if (duration.hours && duration.hours > 0) parts.push(`${duration.hours}h`);
+    if (duration.minutes && duration.minutes > 0) parts.push(`${duration.minutes}m`);
+    if (duration.seconds && duration.seconds > 0) parts.push(`${duration.seconds}s`);
+    setElapsedTime(parts.join(' '));
   }, [data]);
   const renderContent = () => {
     if (loading) {
@@ -132,11 +127,14 @@ export function HomePage() {
             </div>
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Paid Leave: Cost to Taxpayer</h3>
-              <div className="font-mono text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-[#cc0000] mt-2 animate-text-glow">
+              <div className="font-mono text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-[#cc0000] mt-2">
                 {totalPaidFormatter.format(totalPaid)}
               </div>
               <p className="text-sm text-[#f5f5f5]/70 mt-2 font-mono">
                 Time on garden leave: {elapsedTime}
+              </p>
+              <p className="text-sm text-[#f5f5f5]/70 mt-4 font-mono">
+                Andrew Coster has resigned. The clock has stopped at this final cost to taxpayers.
               </p>
             </div>
             <Button asChild className="w-full bg-[#cc0000] text-white font-display text-xl tracking-wider py-6 hover:bg-[#a30000] transition-all duration-300 animate-button-glow hover:scale-105 hover:translate-y-[-4px]">
