@@ -1,31 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { intervalToDuration } from 'date-fns';
 import type { ApiResponse, CalculatorData } from '@shared/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-});
 const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 0,
 });
-const totalPaidFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 3,
-  maximumFractionDigits: 3,
-});
 // Updated mailto link as per client request
 const mailtoLink = `mailto:commission@publicservice.govt.nz?cc=requests@taxpayers.org.nz&subject=Andrew%20Coster%20has%20got%20to%20go&body=Dear%20Mr%20Roche%2C%0A%0AI%E2%80%99m%20writing%20to%20urge%20you%20to%20immediately%20dismiss%20Andrew%20Coster%20from%20his%20role%20as%20Chief%20Executive%20of%20the%20Social%20Investment%20Agency.%0A%0AThe%20Independent%20Police%20Conduct%20Authority%E2%80%99s%20findings%2C%20which%20Police%20Commissioner%20Chambers%20say%20described%20%E2%80%9Ca%20lack%20of%20leadership%20and%20integrity%20at%20the%20highest%20levels%20of%20the%20police%E2%80%9D%2C%20make%20his%20continued%20employment%20untenable.%0A%0AIt%20is%20unacceptable%20that%20he%20remains%20on%20full%20paid%20leave%20at%20taxpayers%E2%80%99%20expense%2C%20and%20equally%20unacceptable%20that%20any%20golden%20handshake%20be%20considered.%0A%0ATaxpayers%20deserve%20real%20accountability.%20That%20means%20consequences%2C%20not%20a%20payout.%0A%0ASincerely%2C`;
 export function HomePage() {
   const [data, setData] = useState<CalculatorData | null>(null);
-  const [totalPaid, setTotalPaid] = useState<number>(0);
-  const [elapsedTime, setElapsedTime] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -50,30 +36,6 @@ export function HomePage() {
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    if (!data) return;
-    const startDate = new Date(data.startDate);
-    const salaryPerSecond = data.annualSalary / (365 * 24 * 60 * 60);
-    // Freeze the clock at a specific end date.
-    // Using a hardcoded date for the final calculation as the counter is now static.
-    const endDate = new Date("2025-12-15T09:00:00Z");
-    const now = new Date();
-    const finalDate = now < endDate ? now : endDate; // Use 'now' if it's before the end date, otherwise use the end date.
-    // Calculate total paid and elapsed time once and set it.
-    const secondsElapsed = (finalDate.getTime() - startDate.getTime()) / 1000;
-    if (secondsElapsed > 0) {
-      setTotalPaid(secondsElapsed * salaryPerSecond);
-    } else {
-      setTotalPaid(0);
-    }
-    const duration = intervalToDuration({ start: startDate, end: finalDate });
-    const parts = [];
-    if (duration.days && duration.days > 0) parts.push(`${duration.days}d`);
-    if (duration.hours && duration.hours > 0) parts.push(`${duration.hours}h`);
-    if (duration.minutes && duration.minutes > 0) parts.push(`${duration.minutes}m`);
-    if (duration.seconds && duration.seconds > 0) parts.push(`${duration.seconds}s`);
-    setElapsedTime(parts.join(' '));
-  }, [data]);
   const renderContent = () => {
     if (loading) {
       return <LoadingSkeleton />;
@@ -128,10 +90,10 @@ export function HomePage() {
             <div className="bg-black border-2 border-[#cc0000] p-6 text-center">
               <h3 className="font-display text-2xl uppercase text-[#f5f5f5] tracking-widest">Paid Leave: Cost to Taxpayer</h3>
               <div className="font-mono text-4xl sm:text-5xl md:text-5xl lg:text-6xl text-[#cc0000] mt-2">
-                {totalPaidFormatter.format(totalPaid)}
+                $33,664.838
               </div>
               <p className="text-sm text-[#f5f5f5]/70 mt-2 font-mono">
-                Time on garden leave: {elapsedTime}
+                Time on garden leave: 22d 16m 44s
               </p>
               <p className="text-sm text-[#f5f5f5]/70 mt-4 font-mono">
                 Andrew Coster has resigned. The clock has stopped.
@@ -162,7 +124,7 @@ export function HomePage() {
         >
           <h4 className="font-display text-3xl text-[#cc0000] uppercase mb-4 text-center">Salary Calculation</h4>
           <p className="text-lg text-center text-[#f5f5f5]/60 max-w-2xl mx-auto">
-            The yearly salary is calculated based on the Chief Executive of the Social Investment Agency���s salary between November 11 and December 31 2024. This is then used to determine the cost to taxpayers in real time.
+            The yearly salary is calculated based on the Chief Executive of the Social Investment Agency’s salary between November 11 and December 31 2024. This is then used to determine the cost to taxpayers in real time.
           </p>
           <p className="text-lg text-center text-[#f5f5f5]/60 max-w-3xl mx-auto mt-4 break-words">
             This figure is available at <a href="https://www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#cc0000] transition-colors">www.publicservice.govt.nz/system/leaders/appointing-leaders/leader-pay/chief-executive-remuneration</a>
